@@ -1,0 +1,33 @@
+#!/bin/sh
+# Run "apachectl help" for usage info
+
+ARGV="$@"
+HTTPD='${apache:location}/bin/httpd'
+CONFIG='${apache-config:output}'
+
+# pick up any necessary environment variables
+if test -f ${apache:location}/bin/envvars; then
+  . ${apache:location}/bin/envvars
+fi
+
+ERROR=0
+if [ "x$ARGV" = "x" ] ; then 
+    ARGV="-h"
+fi
+
+case $ARGV in
+start|stop|restart|graceful|graceful-stop)
+    $HTTPD -f $CONFIG -k $ARGV
+    ERROR=$?
+    ;;
+configtest)
+    $HTTPD -f $CONFIG -t
+    ERROR=$?
+    ;;
+*)
+    $HTTPD -f $CONFIG $ARGV
+    ERROR=$?
+esac
+
+exit $ERROR
+
