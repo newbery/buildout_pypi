@@ -1,0 +1,6 @@
+virtualenv
+distribute*
+.installed.cfg
+parts
+etc
+bin
